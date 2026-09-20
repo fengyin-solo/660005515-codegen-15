@@ -30,11 +30,16 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import { useTradingStore } from '../store/trading'
 const store = useTradingStore(); const eqChart = ref<HTMLDivElement>(); let inst: echarts.ECharts|null=null
+function ensureInst(): echarts.ECharts|null {
+  if (!inst && eqChart.value) inst = echarts.init(eqChart.value)
+  return inst
+}
 
 function updateEq() {
-  if (!inst||!store.gridResult) return
+  const chart = ensureInst()
+  if (!chart || !store.gridResult) return
   const eq = store.gridResult.equityCurve
-  inst.setOption({
+  chart.setOption({
     backgroundColor:'transparent',grid:{left:45,right:10,top:5,bottom:20},
     xAxis:{type:'category',data:eq.map((_,i)=>i),show:false},
     yAxis:{type:'value',axisLabel:{color:'#94a3b8',fontSize:9}},

@@ -14,17 +14,26 @@
         <BacktestReport />
       </div>
     </div>
+    <div class="alert-area">
+      <AlertCenter />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import OrderBookDepth from './components/OrderBookDepth.vue'
 import PriceChart from './components/PriceChart.vue'
 import GridControl from './components/GridControl.vue'
 import BacktestReport from './components/BacktestReport.vue'
+import AlertCenter from './components/AlertCenter.vue'
 import { useTradingStore } from './store/trading'
+import { useAlertStore } from './store/alerts'
 const store = useTradingStore()
+const alertStore = useAlertStore()
+watch(() => store.ticks[store.ticks.length - 1], (tick) => {
+  if (tick) alertStore.ingestTick(tick, store.config)
+})
 onMounted(() => store.connectWS())
 onUnmounted(() => store.disconnectWS())
 </script>
@@ -39,4 +48,5 @@ body{font-family:system-ui,sans-serif;background:#0a0e27;color:#e0e0e0}
 .dot{width:8px;height:8px;border-radius:50%;background:#ef4444}.dot.on{background:#22c55e}
 .main-grid{display:grid;grid-template-columns:1fr 360px;gap:12px;padding:12px 24px;min-height:85vh}
 .col-narrow{display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.alert-area{padding:0 24px 16px}
 </style>
