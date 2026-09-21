@@ -12,6 +12,7 @@
       <div class="col-narrow">
         <GridControl />
         <BacktestReport />
+        <AlertCenter />
       </div>
     </div>
   </div>
@@ -23,6 +24,7 @@ import OrderBookDepth from './components/OrderBookDepth.vue'
 import PriceChart from './components/PriceChart.vue'
 import GridControl from './components/GridControl.vue'
 import BacktestReport from './components/BacktestReport.vue'
+import AlertCenter from './components/AlertCenter.vue'
 import { useTradingStore } from './store/trading'
 const store = useTradingStore()
 onMounted(() => store.connectWS())
